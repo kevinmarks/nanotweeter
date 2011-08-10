@@ -72,6 +72,7 @@ public class Fetcher extends Service {
 	final static String LAST_TWEET_ID_FILENAME = "lasttweets";
 	final static long[] VIBRATION_PATTERN = new long[] { 0, 100, 60, 100 };
 	final static int ERROR_NOTIFICATION_ID = 0;
+	final static int REAUTH_NOTIFICATION_ID = 1;
 	private final static String TWEET_SOUND_FILENAME = "tweet.ogg";
 
 	private SharedPreferences prefs;
@@ -198,7 +199,7 @@ public class Fetcher extends Service {
 				PendingIntent.getActivity(Fetcher.this, 0, i, 0));
 			n.flags |= Notification.FLAG_AUTO_CANCEL;
 			((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-				.notify(ERROR_NOTIFICATION_ID, n);
+				.notify((forbidden) ? REAUTH_NOTIFICATION_ID : ERROR_NOTIFICATION_ID, n);
 		}
 	
 		private HttpEntity download(
