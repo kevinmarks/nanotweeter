@@ -186,7 +186,7 @@ public class Fetcher extends Service {
 			private static final long serialVersionUID = 1L;
 		}
 	
-		private void showUnauthorizedNotification() {
+		private void showUnauthorizedNotification(boolean forbidden ) {
 			Notification n = new Notification();
 			n.icon = R.drawable.notification_icon_status_bar;
 			Intent i = new Intent(
@@ -194,7 +194,7 @@ public class Fetcher extends Service {
 			i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			n.setLatestEventInfo(Fetcher.this,
 				getString(R.string.app_name),
-				getString(R.string.unauthorized),
+				(forbidden) ? getString(R.string.forbidden) : getString(R.string.unauthorized) ,
 				PendingIntent.getActivity(Fetcher.this, 0, i, 0));
 			n.flags |= Notification.FLAG_AUTO_CANCEL;
 			((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
@@ -227,10 +227,16 @@ public class Fetcher extends Service {
 			HttpEntity ent = r.getEntity();
 			
 			if (status == HttpStatus.SC_UNAUTHORIZED) {
-				showUnauthorizedNotification();
+				showUnauthorizedNotification(false);
 				
 				finish(ent);
 				throw new DownloadException();
+			} else if (status == HttpStatus.SC_FORBIDDEN) {
+				// this likely means we are in the "authed old style and are being denied DM's state"
+				// pop a dialog suggesting a reAuth - don't kill the whole thing
+				showUnauthorizedNotification(true);
+				finish(ent);
+				return null;
 			} else {
 				((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
 					.cancel(ERROR_NOTIFICATION_ID);
@@ -243,9 +249,9 @@ public class Fetcher extends Service {
 				// Nothing new.
 				finish(ent);
 				return null;
-			} else {
+			}  else {
 				// All other response codes are essentially transient errors.
-				// "403 Forbidden" and "404 Not Found" are exceptions, but there
+				// "404 Not Found" is an exceptions, but there
 				// isn't anything reasonable we can do to recover from them.
 				finish(ent);
 				throw new DownloadException();
@@ -274,7 +280,7 @@ public class Fetcher extends Service {
 					"Skipping fetch because we are not authenticated.");
 				
 				if (prefs.getString("password", "").length() != 0) {
-					showUnauthorizedNotification();
+					showUnauthorizedNotification(false);
 				}
 				return;
 			}

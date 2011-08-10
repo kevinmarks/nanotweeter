@@ -1,0 +1,6 @@
+.svn
+.DS_Store
+.classpath
+.project
+bin/*
+gen/*
