@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	>
+<LinearLayout
+	android:orientation="horizontal"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	>
+<ImageView
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	style="@style/notificationIcon"
+	/>
+<TextView android:id="@+id/notification_time"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	style="@style/notificationTime"
+	/>
+<TextView android:id="@+id/notification_user"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	style="@style/notificationUsername"
+	/>
+<TextView android:id="@+id/notification_is_message"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	style="@style/notificationIsMessage"
+	/>
+</LinearLayout>
+<TextView android:id="@+id/notification_text"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	style="@style/notificationText"
+	android:textSize="@dimen/notification_longtext_text_size"
+	/>
+</LinearLayout>

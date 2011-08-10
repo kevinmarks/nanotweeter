@@ -1,0 +1,4 @@
+35indigobunting.mp3 is a public domain recording of an Indigo Bunting. It was made by the U.S. Fish & Wildlife Service and was downloaded from:
+http://www.fws.gov/video/sound.htm
+
+Background noise was removed using Audacity 1.2.4's Noise Removal effect and the nicest tweet was trimmed out. That was compressed to Ogg Vorbis using OggEnc 2.85 with default parameters.

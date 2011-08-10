@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">nanoTweeter</string>
+<string name="configuration_title"><b>nanoTweeter</b> Settings</string>
+<string name="enable">Start automatically in the background and check for updates/messages every:</string>
+<string name="interval">Check for updates every:</string>
+<string name="interval_option">1#1 minute| 1&lt;{0} minutes</string>
+<string name="interval_battery_warning">(Shorter times use more battery power.)</string>
+<string name="options">Options</string>
+<string name="also_check">Also check for:</string>
+<string name="messages">direct messages</string>
+<string name="replies">\@ replies</string>
+<string name="filter_label">Also show all tweets for:</string>
+<string name="filter_none">everyone you follow</string>
+<string name="filter_whitelist">only these users:</string>
+<string name="filter_blacklist">everyone except these users:</string>
+<string name="filter_all">nobody</string>
+<string name="filter_instructions">(List the usernames separated by spaces.)</string>
+<string name="notification_options">Notify with:</string>
+<string name="sound">sound</string>
+<string name="vibrate">vibration</string>
+<string name="lights">light flashing</string>
+<string name="account">Twitter Account</string>
+<string name="sign_in">Sign in</string>
+<string name="signed_in_as">Signed in as %1$s</string>
+<string name="change_account">Use a different account</string>
+<string name="save_settings">Apply/save settings</string>
+<string name="reset_settings">Reset to saved settings</string>
+<string name="follow_link">Follow @nanoTweeter for updates about new versions.</string>
+<string name="unauthorized"><!-- This has to be short to fit in the notification. -->Unauthorized. Please sign in again.</string>
+<string name="notification_is_message">(Direct message)</string>
+<string name="fetching_request_token">Contacting Twitter...</string>
+<string name="fetching_access_token">Checking Twitter access...</string>
+<string name="upgraders_need_to_sign_in_again">Hello!\n\nTwitter have changed the way they do signing in for apps, so you need to sign in again to keep using nanoTweeter.\n\nSorry for the inconvenience!</string>
+<string name="ok">OK</string>
+<string name="sign_in_again_later">I\'ll do it later</string>
+<string name="auth_not_completed">The signing-in process isn\'t completed yet. If you see the confirmation page from Twitter then please wait a few more seconds and it will finish automatically.\n\nWould you like to cancel signing in?</string>
+<string name="cancel_auth">Cancel signing in</string>
+<string name="dont_cancel_auth">Don\'t cancel</string>
+<string name="auth_network_error">Could not contact Twitter. Please try again.</string>
+<string name="credits">Credits/licenses</string>
+<string name="credits_text">nanoTweeter is by Jon Colverson and is released under the MIT license &lt;http://opensource.org/licenses/mit-license.php&gt;\n\nIt uses the following libraries:\n\nApache Commons Lang (under Apache License 2.0 &lt;http://www.apache.org/licenses/LICENSE-2.0&gt;)\n\nSignpost (under Apache License 2.0 &lt;http://www.apache.org/licenses/LICENSE-2.0&gt;)</string>
+</resources>

@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/55/trunk/src/net/jjc1138/android/twitter
+END
+ActivityTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/42/trunk/src/net/jjc1138/android/twitter/ActivityTask.java
+END
+Fetcher.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/50/trunk/src/net/jjc1138/android/twitter/Fetcher.java
+END
+FetcherWakeLock.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/38/trunk/src/net/jjc1138/android/twitter/FetcherWakeLock.java
+END
+AlarmReceiver.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/38/trunk/src/net/jjc1138/android/twitter/AlarmReceiver.java
+END
+TwitterAuth.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/55/trunk/src/net/jjc1138/android/twitter/TwitterAuth.java
+END
+TwitterConfig.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/53/trunk/src/net/jjc1138/android/twitter/TwitterConfig.java
+END
+BootReceiver.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/47/trunk/src/net/jjc1138/android/twitter/BootReceiver.java
+END

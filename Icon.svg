@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="2400"
+   height="2400"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   version="1.0"
+   sodipodi:docname="Icon.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:export-filename="C:\androidworkspace\twitter\Icon.png"
+   inkscape:export-xdpi="1.8"
+   inkscape:export-ydpi="1.8">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient6187">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop6189" />
+      <stop
+         style="stop-color:#1f1f1f;stop-opacity:1;"
+         offset="1"
+         id="stop6191" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4984">
+      <stop
+         id="stop4986"
+         offset="0"
+         style="stop-color:#000000;stop-opacity:1;" />
+      <stop
+         id="stop4988"
+         offset="1"
+         style="stop-color:#000000;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4666">
+      <stop
+         style="stop-color:#ff0000;stop-opacity:1;"
+         offset="0"
+         id="stop4668" />
+      <stop
+         id="stop4674"
+         offset="0.33000001"
+         style="stop-color:#ffff00;stop-opacity:1;" />
+      <stop
+         style="stop-color:#7fff00;stop-opacity:1;"
+         offset="0.66000003"
+         id="stop4702" />
+      <stop
+         style="stop-color:#00ffff;stop-opacity:1;"
+         offset="1"
+         id="stop4676" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4984"
+       id="linearGradient5047"
+       gradientUnits="userSpaceOnUse"
+       x1="647.57812"
+       y1="695.20734"
+       x2="1157.7344"
+       y2="695.20734" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4984"
+       id="linearGradient5931"
+       gradientUnits="userSpaceOnUse"
+       x1="647.57812"
+       y1="695.20734"
+       x2="1157.7344"
+       y2="695.20734" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4984"
+       id="linearGradient6557"
+       gradientUnits="userSpaceOnUse"
+       x1="647.57812"
+       y1="695.20734"
+       x2="1157.7344"
+       y2="695.20734" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6187"
+       id="linearGradient6559"
+       gradientUnits="userSpaceOnUse"
+       x1="258.91125"
+       y1="1081.4126"
+       x2="2017.3344"
+       y2="1081.4126" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4984"
+       id="linearGradient6567"
+       gradientUnits="userSpaceOnUse"
+       x1="647.57812"
+       y1="695.20734"
+       x2="1157.7344"
+       y2="695.20734" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6187"
+       id="linearGradient6569"
+       gradientUnits="userSpaceOnUse"
+       x1="258.91125"
+       y1="1081.4126"
+       x2="2017.3344"
+       y2="1081.4126" />
+    <filter
+       inkscape:collect="always"
+       id="filter6577">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="49.305995"
+         id="feGaussianBlur6579" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6187"
+       id="linearGradient6587"
+       x1="493.91125"
+       y1="1081.4126"
+       x2="1452.3344"
+       y2="1081.4126"
+       gradientUnits="userSpaceOnUse" />
+    <filter
+       inkscape:collect="always"
+       id="filter8311">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="20.469137"
+         id="feGaussianBlur8313" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6187"
+       id="linearGradient8315"
+       gradientUnits="userSpaceOnUse"
+       x1="493.91125"
+       y1="1081.4126"
+       x2="1452.3344"
+       y2="1081.4126" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6187"
+       id="linearGradient8317"
+       gradientUnits="userSpaceOnUse"
+       x1="493.91125"
+       y1="1081.4126"
+       x2="1452.3344"
+       y2="1081.4126" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6187"
+       id="linearGradient8319"
+       gradientUnits="userSpaceOnUse"
+       x1="493.91125"
+       y1="1081.4126"
+       x2="1452.3344"
+       y2="1081.4126" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6187"
+       id="linearGradient8321"
+       gradientUnits="userSpaceOnUse"
+       x1="493.91125"
+       y1="1081.4126"
+       x2="1452.3344"
+       y2="1081.4126" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6187"
+       id="linearGradient8323"
+       gradientUnits="userSpaceOnUse"
+       x1="493.91125"
+       y1="1081.4126"
+       x2="1452.3344"
+       y2="1081.4126" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6187"
+       id="linearGradient8325"
+       gradientUnits="userSpaceOnUse"
+       x1="493.91125"
+       y1="1081.4126"
+       x2="1452.3344"
+       y2="1081.4126" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6187"
+       id="linearGradient8327"
+       gradientUnits="userSpaceOnUse"
+       x1="493.91125"
+       y1="1081.4126"
+       x2="1452.3344"
+       y2="1081.4126" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6187"
+       id="linearGradient8329"
+       gradientUnits="userSpaceOnUse"
+       x1="493.91125"
+       y1="1081.4126"
+       x2="1452.3344"
+       y2="1081.4126" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4666"
+       id="linearGradient8331"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1395994,0,0,1.1395994,-295.82114,-70.53515)"
+       x1="304.04999"
+       y1="1112.4482"
+       x2="2305.3875"
+       y2="1112.4482" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#212421"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.2"
+     inkscape:cx="1179.5213"
+     inkscape:cy="1349.9592"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showborder="true"
+     inkscape:window-width="1280"
+     inkscape:window-height="904"
+     inkscape:window-x="1916"
+     inkscape:window-y="-4" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:115.03359985;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter8311)"
+       d="M 1223.4313,283.08715 C 599.2003,283.08715 92.5845,662.33575 92.5845,1129.642 C 92.5845,1434.9426 308.8321,1702.6622 632.8343,1851.5962 C 573.7131,1951.6127 467.3356,2071.7649 286.3432,2212.6601 C 639.9447,2120.6839 878.2125,2037.913 1031.04,1963.9795 C 1093.578,1972.0151 1157.8454,1976.2314 1223.4313,1976.2314 C 1847.662,1976.2314 2354.2779,1596.9481 2354.2779,1129.642 C 2354.2779,662.33575 1847.662,283.08715 1223.4313,283.08715 z"
+       id="path6589"
+       transform="matrix(0.9895691,0,0,0.9895691,0.1571695,1.9356647)" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:url(#linearGradient8331);stroke-width:113.83369446;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 1191.0356,242.48724 C 573.31593,242.48724 71.984569,617.7799 71.984548,1080.2117 C 71.984548,1382.3278 285.97653,1647.2548 606.5991,1794.6353 C 548.09452,1893.6085 442.82668,2012.5074 263.72215,2151.933 C 613.63532,2060.9162 849.41775,1979.0087 1000.6511,1905.8463 C 1062.5368,1913.7981 1126.1338,1917.9704 1191.0356,1917.9704 C 1808.755,1917.9704 2310.0865,1542.6434 2310.0865,1080.2117 C 2310.0865,617.7799 1808.755,242.48724 1191.0356,242.48724 z"
+       id="path3177" />
+    <g
+       id="g6537"
+       transform="matrix(0.9895691,0,0,0.9895691,91.076028,84.651183)"
+       style="opacity:0.54100001;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;filter:url(#filter6577)">
+      <flowRoot
+         transform="matrix(4.2722405,0,0,4.2722405,-2295.4395,-1888.6804)"
+         style="font-size:400px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:7.02207661;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+         id="flowRoot6539"
+         xml:space="preserve"><flowRegion
+           style="fill:url(#linearGradient6557);fill-opacity:1;stroke:url(#linearGradient6559)"
+           id="flowRegion6541"><rect
+             style="font-size:400px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:7.02207661;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+             y="588"
+             x="576"
+             height="303.31171"
+             width="613.47406"
+             id="rect6543" /></flowRegion><flowPara
+           style="font-size:400px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:7.02207661;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+           id="flowPara6545">T</flowPara></flowRoot>      <flowRoot
+         transform="matrix(4.2722405,0,0,4.2722405,-3015.0464,-1888.6804)"
+         style="font-size:400px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:7.02207661;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Italic"
+         id="flowRoot6547"
+         xml:space="preserve"><flowRegion
+           style="fill:url(#linearGradient6567);fill-opacity:1;stroke:url(#linearGradient6569)"
+           id="flowRegion6549"><rect
+             style="font-size:400px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:7.02207661;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Italic"
+             y="588"
+             x="576"
+             height="303.31171"
+             width="613.47406"
+             id="rect6551" /></flowRegion><flowPara
+           style="font-size:400px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:7.02207661;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Italic"
+           id="flowPara6553">n</flowPara></flowRoot>    </g>
+    <g
+       id="g6511"
+       transform="matrix(0.9895691,0,0,0.9895691,39.739934,1.9356647)"
+       style="stroke:url(#linearGradient6587);stroke-opacity:1">
+      <flowRoot
+         transform="matrix(4.2722405,0,0,4.2722405,-2295.4395,-1888.6804)"
+         style="font-size:400px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:url(#linearGradient8321);stroke-width:7.02207661;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+         id="flowRoot4704"
+         xml:space="preserve"><flowRegion
+           style="fill:url(#linearGradient5047);fill-opacity:1;stroke:url(#linearGradient8317)"
+           id="flowRegion4706"><rect
+             style="font-size:400px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:url(#linearGradient8315);stroke-width:7.02207661;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+             y="588"
+             x="576"
+             height="303.31171"
+             width="613.47406"
+             id="rect4708" /></flowRegion><flowPara
+           style="font-size:400px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:url(#linearGradient8319);stroke-width:7.02207661;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+           id="flowPara4712">T</flowPara></flowRoot>      <flowRoot
+         transform="matrix(4.2722405,0,0,4.2722405,-3015.0464,-1888.6804)"
+         style="font-size:400px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:url(#linearGradient8329);stroke-width:7.02207661;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Italic"
+         id="flowRoot5923"
+         xml:space="preserve"><flowRegion
+           style="fill:url(#linearGradient5931);fill-opacity:1;stroke:url(#linearGradient8325)"
+           id="flowRegion5925"><rect
+             style="font-size:400px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:url(#linearGradient8323);stroke-width:7.02207661;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Italic"
+             y="588"
+             x="576"
+             height="303.31171"
+             width="613.47406"
+             id="rect5927" /></flowRegion><flowPara
+           style="font-size:400px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:url(#linearGradient8327);stroke-width:7.02207661;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Italic"
+           id="flowPara5929">n</flowPara></flowRoot>    </g>
+  </g>
+</svg>

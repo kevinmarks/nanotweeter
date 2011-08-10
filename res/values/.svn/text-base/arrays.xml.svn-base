@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string-array name="filter_types">
+	<item>@string/filter_none</item>
+	<item>@string/filter_whitelist</item>
+	<item>@string/filter_blacklist</item>
+	<item>@string/filter_all</item>
+</string-array>
+</resources>

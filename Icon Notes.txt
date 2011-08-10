@@ -1,0 +1,1 @@
+notification_icon_status_bar.png is desaturated by luminosity in GIMP.
