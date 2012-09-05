@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
@@ -52,14 +54,19 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
+import android.support.v4.app.*;
+import android.support.v4.app.NotificationCompat.BigTextStyle;
 
 public class Fetcher extends Service {
 	final static String LOG_TAG = "nanoTweeter";
@@ -346,7 +353,8 @@ public class Fetcher extends Service {
 					}
 					text.get(depth - 1).append(ch, start, length);
 				}
-			
+				abstract void startElement(Attributes attributes);
+				
 				@Override
 				public void startElement(String uri, String localName,
 					String name, Attributes attributes)
@@ -371,12 +379,13 @@ public class Fetcher extends Service {
 			
 			abstract class Tweet {
 				public Tweet(
-					long id, Date date, String screenName, String text) {
+					long id, Date date, String screenName, String text, String photo) {
 					
 					this.id = id;
 					this.date = date;
 					this.screenName = screenName;
 					this.text = text;
+					this.photo = photo;
 				}
 			
 				public long getID() {
@@ -392,19 +401,23 @@ public class Fetcher extends Service {
 					return text;
 				}
 			
+				public String getPhoto() {
+					return photo;
+				}
 				abstract public String toString();
 			
 				private long id;
 				private Date date;
 				private String screenName;
 				private String text;
+				private String photo;
 			}
 			
 			class Status extends Tweet {
 				public Status(
-					long id, Date date, String screenName, String text) {
+					long id, Date date, String screenName, String text, String photo) {
 					
-					super(id, date, screenName, text);
+					super(id, date, screenName, text, photo);
 				}
 			
 				public String toString() {
@@ -413,9 +426,9 @@ public class Fetcher extends Service {
 			}
 			class Message extends Tweet {
 				public Message(
-					long id, Date date, String screenName, String text) {
+					long id, Date date, String screenName, String text, String photo) {
 					
-					super(id, date, screenName, text);
+					super(id, date, screenName, text, photo);
 				}
 			
 				public String toString() {
@@ -435,22 +448,35 @@ public class Fetcher extends Service {
 					"statuses", "status", "id" };
 				private final String[] textPath = {
 					"statuses", "status", "text" };
+				private final String[] urlPath = {
+						"statuses", "status", "entities", "urls", "url" };
+				private final String[] displayUrlPath = {
+					"statuses", "status", "entities", "urls", "url","display_url" };
 				private final String[] screenNamePath = {
-					"statuses", "status", "user", "screen_name" };
+						"statuses", "status", "user", "screen_name" };
+				private final String[] photoPath = {
+						"statuses", "status", "user", "profile_image_url" };
+				
 			
 				private Date createdAt;
 				private long id;
 				private String text;
 				private String screenName;
+				private String photo;
 			
 				abstract void updateLast(long id);
-			
+				@Override
+				void startElement(Attributes attributes) {
+					if (pathEquals(urlPath)) {
+						
+					}
+				}
 				@Override
 				void endElement() {
 					if (pathEquals(statusPath)) {
 						if (!screenName.equals(username)) {
 							Status s = new Status(
-								id, createdAt, screenName, text);
+								id, createdAt, screenName, text, photo);
 							tweets.addFirst(s);
 							// Log.v(LOG_TAG, s.toString());
 						}
@@ -471,6 +497,8 @@ public class Fetcher extends Service {
 						text = newLinesToSpaces(unescapeHtml(getCurrentText()));
 					} else if (pathEquals(screenNamePath)) {
 						screenName = unescapeHtml(getCurrentText());
+					} else if (pathEquals(photoPath)) {
+						photo = unescapeHtml(getCurrentText());
 					}
 				}
 			}
@@ -500,17 +528,26 @@ public class Fetcher extends Service {
 				private final String[] screenNamePath = {
 					"direct-messages", "direct_message",
 					"sender", "screen_name" };
+				private final String[] photoPath = {
+						"direct-messages", "direct_message",
+						"sender", "profile_image_url" };
 			
 				private Date createdAt;
 				private long id;
 				private String text;
 				private String screenName;
+				private String photo;
+				
+				@Override 
+				void startElement(Attributes attributes){
+					
+				}
 			
 				@Override
 				void endElement() {
 					if (pathEquals(messagePath)) {
 						Message m = new Message(
-							id, createdAt, screenName, text);
+							id, createdAt, screenName, text, photo);
 						tweets.addFirst(m);
 						// Log.v(LOG_TAG, m.toString());
 					} else if (pathEquals(createdAtPath)) {
@@ -530,6 +567,8 @@ public class Fetcher extends Service {
 						text = newLinesToSpaces(unescapeHtml(getCurrentText()));
 					} else if (pathEquals(screenNamePath)) {
 						screenName = unescapeHtml(getCurrentText());
+					} else if (pathEquals(photoPath)) {
+						photo = unescapeHtml(getCurrentText());
 					}
 				}
 			}
@@ -657,7 +696,7 @@ public class Fetcher extends Service {
 				return;
 			}
 			
-			final String twitterRoot = "http://mobile.twitter.com/";
+			final String twitterRoot = "http://twitter.com/";
 			final DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT);
 			final NotificationManager nm =
 				(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -699,30 +738,52 @@ public class Fetcher extends Service {
 			final boolean lights = prefs.getBoolean("lights", false);
 			
 			for (final Tweet t : tweets) {
-				final Notification n = new Notification();
-				n.icon = R.drawable.notification_icon_status_bar;
 				final String screenName = t.getScreenName();
 				final long id = t.getID();
 				final boolean message = t instanceof Message;
 				Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(
-					twitterRoot + (message ? "inbox" :
+					twitterRoot + (message ? "messages" :
 					URLEncoder.encode(screenName) + "/status/" + id)));
 				i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				n.contentIntent = PendingIntent.getActivity(
-					Fetcher.this, 0, i, 0);
 				
 				final String text = t.getText();
-				final RemoteViews v = new RemoteViews(
-					getPackageName(), (text.length() > 90) ?
-					R.layout.notification_longtext : R.layout.notification);
 				final Date d = t.getDate();
-				v.setTextViewText(R.id.notification_time, df.format(d));
-				v.setTextViewText(R.id.notification_user, screenName);
-				v.setViewVisibility(R.id.notification_is_message,
-					message ? View.VISIBLE : View.GONE);
-				v.setTextViewText(R.id.notification_text, text);
+									
+				Bitmap bigIcon = null;
+				    try {
+				        URL url = new URL(t.getPhoto());
+				        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+				        connection.setDoInput(true);
+				        connection.connect();
+				        InputStream input = connection.getInputStream();
+				        bigIcon = BitmapFactory.decodeStream(input);
+				    } catch (IOException e) {
+				    	Log.e(LOG_TAG, "Couldn't get image.");
+				    }
 				
-				n.contentView = v;
+				Notification n = new NotificationCompat.Builder(getApplicationContext())
+		         .setContentTitle(message? "(direct) "+ screenName: screenName)
+		         .setContentText(text)
+		         .setSmallIcon(R.drawable.notification_icon_status_bar)
+		         .setLargeIcon(bigIcon)
+		         .setContentIntent(PendingIntent.getActivity(Fetcher.this, 0, i, 0))
+		         .setStyle(new NotificationCompat.BigTextStyle()
+		         	.bigText(text))
+		         .build(); 
+
+				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+					// revert to the previous display style for old ones
+					final RemoteViews v = new RemoteViews(
+							getPackageName(), (text.length() > 80) ?
+							R.layout.notification_longtext : R.layout.notification); 
+
+					v.setTextViewText(R.id.notification_time, df.format(d));
+					v.setTextViewText(R.id.notification_user, screenName);
+					v.setViewVisibility(R.id.notification_is_message,
+							message ? View.VISIBLE : View.GONE);
+					v.setTextViewText(R.id.notification_text, text);
+					n.contentView = v;
+				}
 				n.when = d.getTime();
 				if (sound) {
 					n.audioStreamType = AudioManager.STREAM_RING;

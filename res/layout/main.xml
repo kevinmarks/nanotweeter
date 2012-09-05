@@ -12,13 +12,13 @@
 	/>
 <ScrollView
 	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
+	android:layout_height="0dip"
 	android:layout_weight="1"
 	>
 <LinearLayout
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
+	android:layout_height="wrap_content"
 	>
 <CheckBox android:id="@+id/enable"
 	android:layout_width="wrap_content"
