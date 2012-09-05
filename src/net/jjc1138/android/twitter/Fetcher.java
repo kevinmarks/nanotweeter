@@ -776,7 +776,7 @@ public class Fetcher extends Service {
 					final RemoteViews v = new RemoteViews(
 							getPackageName(), (text.length() > 80) ?
 							R.layout.notification_longtext : R.layout.notification); 
-
+					v.setImageViewBitmap(R.id.notification_icon, bigIcon);
 					v.setTextViewText(R.id.notification_time, df.format(d));
 					v.setTextViewText(R.id.notification_user, screenName);
 					v.setViewVisibility(R.id.notification_is_message,
