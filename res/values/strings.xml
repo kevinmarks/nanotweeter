@@ -29,8 +29,8 @@
 <string name="follow_link">Follow @nanoTweeter for updates about new versions.</string>
 <string name="unauthorized"><!-- This has to be short to fit in the notification. -->Unauthorized. Please sign in again.</string>
 <string name="notification_is_message">(Direct message)</string>
-<string name="fetching_request_token">Contacting Twitter...</string>
-<string name="fetching_access_token">Checking Twitter access...</string>
+<string name="fetching_request_token">Contacting Twitter…</string>
+<string name="fetching_access_token">Checking Twitter access…</string>
 <string name="upgraders_need_to_sign_in_again">Hello!\n\nTwitter have changed the way they do signing in for apps, so you need to sign in again to keep using nanoTweeter.\n\nSorry for the inconvenience!</string>
 <string name="ok">OK</string>
 <string name="sign_in_again_later">I\'ll do it later</string>

@@ -11,6 +11,11 @@
 	<permission android:name="net.jjc1138.android.twitter.privateservices"
 		android:protectionLevel="signature" />
 	<uses-permission android:name="net.jjc1138.android.twitter.privateservices" />
+	<supports-screens
+		android:smallScreens="true"
+		android:normalScreens="true"
+		android:largeScreens="true"
+		android:anyDensity="true" />
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
 		<activity android:name=".TwitterConfig"
 			android:label="@string/app_name"
@@ -33,9 +38,5 @@
 			</intent-filter>
 		</receiver>
 	</application>
-	<supports-screens
-		android:smallScreens="true"
-		android:normalScreens="true"
-		android:largeScreens="true"
-		android:anyDensity="true" />
+
 </manifest>
