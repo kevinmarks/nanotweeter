@@ -3,6 +3,7 @@ package net.jjc1138.android.twitter;
 import static org.apache.commons.lang.StringEscapeUtils.unescapeHtml;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +25,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
@@ -34,6 +37,7 @@ import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -51,6 +55,8 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -79,7 +85,7 @@ public class Fetcher extends Service {
 	final static String LAST_TWEET_ID_FILENAME = "lasttweets";
 	final static long[] VIBRATION_PATTERN = new long[] { 0, 100, 60, 100 };
 	final static int ERROR_NOTIFICATION_ID = 0;
-	final static int REAUTH_NOTIFICATION_ID = 1;
+	final static int DM_REAUTH_NOTIFICATION_ID = 1;
 	private final static String TWEET_SOUND_FILENAME = "tweet.ogg";
 
 	private SharedPreferences prefs;
@@ -98,6 +104,16 @@ public class Fetcher extends Service {
 		
 		prefs = getSharedPreferences(TwitterConfig.PREFS, 0);
 		handler = new Handler();
+		   try {
+	        Context context = getApplicationContext();
+			File httpCacheDir = new File(context.getCacheDir(), "http");
+	           long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
+	           Class.forName("android.net.http.HttpResponseCache")
+	                   .getMethod("install", File.class, long.class)
+	                   .invoke(null, httpCacheDir, httpCacheSize);
+		   }
+	        catch (Exception httpResponseCacheNotAvailable) {
+	       }
 	}
 
 	@Override
@@ -158,10 +174,10 @@ public class Fetcher extends Service {
 	private class FetcherThread extends Thread {
 		private final Charset FILE_CHARSET = Charset.forName("US-ASCII");
 	
-		private static final String API_HOST = "twitter.com";
+		private static final String API_HOST = "api.twitter.com";
 		private static final int API_PORT = 443;
 		private static final String API_ROOT =
-			"https://" + API_HOST + ":" + API_PORT + "/";
+			"https://" + API_HOST + ":" + API_PORT + "/1/";
 	
 		private static final int FIRST_RUN_NOTIFICATIONS = 3;
 		// This should be 200, but firing so many notifications causes a memory
@@ -193,12 +209,25 @@ public class Fetcher extends Service {
 		private class DownloadException extends Exception {
 			private static final long serialVersionUID = 1L;
 		}
-	
+		private class HttpErrorException extends DownloadException {
+			private static final long serialVersionUID = 1L;
+		
+			private int status;
+		
+			public HttpErrorException(final int status) {
+				this.status = status;
+			}
+		
+			public int getStatus() {
+				return status;
+			}
+		}
+
 		private void showUnauthorizedNotification(boolean forbidden ) {
 			Notification n = new Notification();
 			n.icon = R.drawable.notification_icon_status_bar;
 			Intent i = new Intent(
-				Fetcher.this, TwitterConfig.class);
+				Fetcher.this, TwitterAuth.class);
 			i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			n.setLatestEventInfo(Fetcher.this,
 				getString(R.string.app_name),
@@ -206,7 +235,7 @@ public class Fetcher extends Service {
 				PendingIntent.getActivity(Fetcher.this, 0, i, 0));
 			n.flags |= Notification.FLAG_AUTO_CANCEL;
 			((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-				.notify((forbidden) ? REAUTH_NOTIFICATION_ID : ERROR_NOTIFICATION_ID, n);
+				.notify((forbidden) ? DM_REAUTH_NOTIFICATION_ID : ERROR_NOTIFICATION_ID, n);
 		}
 	
 		private HttpEntity download(
@@ -238,7 +267,7 @@ public class Fetcher extends Service {
 				showUnauthorizedNotification(false);
 				
 				finish(ent);
-				throw new DownloadException();
+				throw new HttpErrorException(status);
 			} else if (status == HttpStatus.SC_FORBIDDEN) {
 				// this likely means we are in the "authed old style and are being denied DM's state"
 				// pop a dialog suggesting a reAuth - don't kill the whole thing
@@ -260,9 +289,10 @@ public class Fetcher extends Service {
 			}  else {
 				// All other response codes are essentially transient errors.
 				// "404 Not Found" is an exceptions, but there
-				// isn't anything reasonable we can do to recover from them.
+				// isn't anything reasonable we can do here to recover from
+				// them.
 				finish(ent);
-				throw new DownloadException();
+				throw new HttpErrorException(status);
 			}
 		}
 	
@@ -379,10 +409,11 @@ public class Fetcher extends Service {
 			
 			abstract class Tweet {
 				public Tweet(
-					long id, Date date, String screenName, String text, String photo) {
+					long id, Date date, String name, String screenName, String text, String photo) {
 					
 					this.id = id;
 					this.date = date;
+					this.name = name;
 					this.screenName = screenName;
 					this.text = text;
 					this.photo = photo;
@@ -397,6 +428,9 @@ public class Fetcher extends Service {
 				public String getScreenName() {
 					return screenName;
 				}
+				public String getName() {
+					return name;
+				}
 				public String getText() {
 					return text;
 				}
@@ -408,6 +442,7 @@ public class Fetcher extends Service {
 			
 				private long id;
 				private Date date;
+				private String name;
 				private String screenName;
 				private String text;
 				private String photo;
@@ -415,9 +450,9 @@ public class Fetcher extends Service {
 			
 			class Status extends Tweet {
 				public Status(
-					long id, Date date, String screenName, String text, String photo) {
+					long id, Date date, String name, String screenName, String text, String photo) {
 					
-					super(id, date, screenName, text, photo);
+					super(id, date, name, screenName, text, photo);
 				}
 			
 				public String toString() {
@@ -426,9 +461,9 @@ public class Fetcher extends Service {
 			}
 			class Message extends Tweet {
 				public Message(
-					long id, Date date, String screenName, String text, String photo) {
+					long id, Date date, String name, String screenName, String text, String photo) {
 					
-					super(id, date, screenName, text, photo);
+					super(id, date, name, screenName, text, photo);
 				}
 			
 				public String toString() {
@@ -454,6 +489,8 @@ public class Fetcher extends Service {
 					"statuses", "status", "entities", "urls", "url","display_url" };
 				private final String[] screenNamePath = {
 						"statuses", "status", "user", "screen_name" };
+				private final String[] namePath = {
+						"statuses", "status", "user", "name" };
 				private final String[] photoPath = {
 						"statuses", "status", "user", "profile_image_url" };
 				
@@ -461,6 +498,7 @@ public class Fetcher extends Service {
 				private Date createdAt;
 				private long id;
 				private String text;
+				private String name;
 				private String screenName;
 				private String photo;
 			
@@ -476,7 +514,7 @@ public class Fetcher extends Service {
 					if (pathEquals(statusPath)) {
 						if (!screenName.equals(username)) {
 							Status s = new Status(
-								id, createdAt, screenName, text, photo);
+								id, createdAt, name, screenName, text, photo);
 							tweets.addFirst(s);
 							// Log.v(LOG_TAG, s.toString());
 						}
@@ -495,6 +533,8 @@ public class Fetcher extends Service {
 						updateLast(id);
 					} else if (pathEquals(textPath)) {
 						text = newLinesToSpaces(unescapeHtml(getCurrentText()));
+					} else if (pathEquals(namePath)) {
+						name = unescapeHtml(getCurrentText());
 					} else if (pathEquals(screenNamePath)) {
 						screenName = unescapeHtml(getCurrentText());
 					} else if (pathEquals(photoPath)) {
@@ -526,8 +566,11 @@ public class Fetcher extends Service {
 				private final String[] textPath = {
 					"direct-messages", "direct_message", "text" };
 				private final String[] screenNamePath = {
-					"direct-messages", "direct_message",
-					"sender", "screen_name" };
+						"direct-messages", "direct_message",
+						"sender", "screen_name" };
+				private final String[] namePath = {
+						"direct-messages", "direct_message",
+						"sender", "name" };
 				private final String[] photoPath = {
 						"direct-messages", "direct_message",
 						"sender", "profile_image_url" };
@@ -535,6 +578,7 @@ public class Fetcher extends Service {
 				private Date createdAt;
 				private long id;
 				private String text;
+				private String name;
 				private String screenName;
 				private String photo;
 				
@@ -547,7 +591,7 @@ public class Fetcher extends Service {
 				void endElement() {
 					if (pathEquals(messagePath)) {
 						Message m = new Message(
-							id, createdAt, screenName, text, photo);
+							id, createdAt, name, screenName, text, photo);
 						tweets.addFirst(m);
 						// Log.v(LOG_TAG, m.toString());
 					} else if (pathEquals(createdAtPath)) {
@@ -565,6 +609,8 @@ public class Fetcher extends Service {
 						lastMessage = Math.max(lastMessage, id);
 					} else if (pathEquals(textPath)) {
 						text = newLinesToSpaces(unescapeHtml(getCurrentText()));
+					} else if (pathEquals(namePath)) {
+						name = unescapeHtml(getCurrentText());
 					} else if (pathEquals(screenNamePath)) {
 						screenName = unescapeHtml(getCurrentText());
 					} else if (pathEquals(photoPath)) {
@@ -607,7 +653,8 @@ public class Fetcher extends Service {
 			try {
 				if (filterType != FILTER_ALL) {
 					ent = download(client, consumer, new URI(API_ROOT +
-						"statuses/friends_timeline.xml" + "?" +
+						"statuses/home_timeline.xml" + "?" +
+						"include_rts=true&include_entities=true&" +
 						(firstRun ? "" :
 							("since_id=" + lastFriendStatus + "&")) +
 						"count=" + ((firstRun && filterType == FILTER_NONE) ?
@@ -616,7 +663,12 @@ public class Fetcher extends Service {
 						reader.setContentHandler(new FriendStatusHandler());
 						is.setByteStream(ent.getContent());
 						reader.parse(is);
-						
+						String[] trackWords = prefs.getString("track", "").trim().split(" ");
+						Pattern trackpat = null;
+						if (trackWords.length >0) {
+							String patternString = "\\b(" + StringUtils.join(trackWords, "|") + ")\\b";
+							trackpat = Pattern.compile(patternString);
+						}
 						if (filterType != FILTER_NONE) {
 							String[] filterNames =
 								prefs.getString("filter", "").split(" ");
@@ -626,14 +678,20 @@ public class Fetcher extends Service {
 							
 							for (Iterator<Tweet> i = tweets.iterator();
 								i.hasNext();) {
-								
+								final Tweet t = i.next();
 								final String screenName =
-									i.next().getScreenName();
+									t.getScreenName();
+								boolean tracked = false;
+								if (trackpat != null) {
+									final String text = t.getText();
+									Matcher matcher = trackpat.matcher(text);
+									tracked = matcher.find();
+								}
 								final boolean filtered = Arrays.binarySearch(
 									filterNames, screenName,
 									String.CASE_INSENSITIVE_ORDER) >= 0;
 								if (filterType == FILTER_WHITELIST) {
-									if (!filtered) {
+									if (!filtered && !tracked) {
 										i.remove();
 									}
 								} else {
@@ -649,9 +707,12 @@ public class Fetcher extends Service {
 				
 				if (prefs.getBoolean("messages", false)) {
 					ent = download(client, consumer, new URI(API_ROOT +
-						"direct_messages.xml" + "?" +
+						"direct_messages.xml" + "?include_rts=false&" +
 						"since_id=" + lastMessage));
 					if (ent != null) {
+						((NotificationManager) getSystemService(
+							NOTIFICATION_SERVICE))
+								.cancel(DM_REAUTH_NOTIFICATION_ID);
 						reader.setContentHandler(new MessageHandler());
 						is.setByteStream(ent.getContent());
 						reader.parse(is);
@@ -660,7 +721,8 @@ public class Fetcher extends Service {
 				
 				if (prefs.getBoolean("replies", false)) {
 					ent = download(client, consumer, new URI(API_ROOT +
-						"statuses/replies.xml" + "?" +
+						"statuses/mentions.xml" + "?" +
+						"include_rts=false&include_entities=true&" +
 						"since_id=" + lastReply));
 					if (ent != null) {
 						reader.setContentHandler(new ReplyHandler());
@@ -739,6 +801,7 @@ public class Fetcher extends Service {
 			
 			for (final Tweet t : tweets) {
 				final String screenName = t.getScreenName();
+				final String name = t.getName();
 				final long id = t.getID();
 				final boolean message = t instanceof Message;
 				Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(
@@ -751,7 +814,7 @@ public class Fetcher extends Service {
 									
 				Bitmap bigIcon = null;
 				    try {
-				        URL url = new URL(t.getPhoto());
+				        URL url = new URL(t.getPhoto().replace("normal", "bigger"));
 				        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 				        connection.setDoInput(true);
 				        connection.connect();
@@ -762,23 +825,26 @@ public class Fetcher extends Service {
 				    }
 				
 				Notification n = new NotificationCompat.Builder(getApplicationContext())
-		         .setContentTitle(message? "(direct) "+ screenName: screenName)
+		         .setContentTitle(name + " @"+ screenName +" "+ (message? "(direct)":""))
 		         .setContentText(text)
 		         .setSmallIcon(R.drawable.notification_icon_status_bar)
 		         .setLargeIcon(bigIcon)
+		         .setWhen(d.getTime())
 		         .setContentIntent(PendingIntent.getActivity(Fetcher.this, 0, i, 0))
+		         //.addAction(R.drawable.notification_icon_status_bar, 'retweet', arg2)
 		         .setStyle(new NotificationCompat.BigTextStyle()
 		         	.bigText(text))
 		         .build(); 
 
-				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-					// revert to the previous display style for old ones
+				if (true) {
+					// handmade layouts win on 4.1 too
 					final RemoteViews v = new RemoteViews(
 							getPackageName(), (text.length() > 80) ?
 							R.layout.notification_longtext : R.layout.notification); 
 					v.setImageViewBitmap(R.id.notification_icon, bigIcon);
 					v.setTextViewText(R.id.notification_time, df.format(d));
-					v.setTextViewText(R.id.notification_user, screenName);
+					v.setTextViewText(R.id.notification_name, name);
+					v.setTextViewText(R.id.notification_user, "@" + screenName);
 					v.setViewVisibility(R.id.notification_is_message,
 							message ? View.VISIBLE : View.GONE);
 					v.setTextViewText(R.id.notification_text, text);
