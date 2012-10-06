@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 <style name="notificationIcon">
 	<item name="android:layout_marginLeft">2sp</item>
 	<item name="android:src">@drawable/notification_icon_view</item>
 </style>
 <style name="notificationTime" parent="notificationTitle">
 	<item name="android:layout_marginLeft">3sp</item>
-	<item name="android:textSize">12sp</item>
+	<item name="android:textSize">10sp</item>
 	<item name="android:textStyle">normal</item>
 </style>
-<style name="notificationUsername" parent="notificationTime">
+<style name="notificationName" parent="notificationTime">
 	<item name="android:layout_marginLeft">4sp</item>
-	<item name="android:textStyle">bold</item>
+	<item name="android:textSize">14sp</item>
+		<item name="android:textStyle">bold</item>
+</style>
+<style name="notificationUsername" parent="notificationTime">
+	<item name="android:textSize">10sp</item>
+    <item name="android:layout_marginLeft">4sp</item>
+	<item name="android:textStyle">normal</item>
 </style>
 <style name="notificationIsMessage" parent="notificationTime">
 	<item name="android:layout_marginLeft">4sp</item>
@@ -19,6 +25,8 @@
 	<item name="android:visibility">gone</item>
 </style>
 <style name="notificationText" parent="notificationBody">
+    <item name="android:layout_marginLeft">2sp</item>
+	<item name="android:textStyle">normal</item>
 </style>
 <style name="webLink">
 	<item name="android:focusable">true</item>

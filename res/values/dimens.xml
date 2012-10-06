@@ -1,3 +1,4 @@
 <resources>
 <dimen name="notification_longtext_text_size">13sp</dimen>
+<dimen name="notification_shorttext_text_size">14sp</dimen>
 </resources>

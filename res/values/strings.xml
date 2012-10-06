@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="app_name">flowPast</string>
-<string name="configuration_title"><b>flowPast</b> Settings</string>
+<string name="app_name">FlowPast</string>
+<string name="configuration_title"><b>FlowPast</b> Settings</string>
 <string name="enable">Start automatically in the background and check for updates every:</string>
 <string name="interval">Check for updates every:</string>
 <string name="interval_option">1#1 minute| 1&lt;{0} minutes</string>
@@ -16,6 +16,7 @@
 <string name="filter_blacklist">everyone except these users:</string>
 <string name="filter_all">nobody</string>
 <string name="filter_instructions">(List the usernames separated by spaces.)</string>
+<string name="track_instructions">List the words to track separated by spaces.</string>
 <string name="notification_options">Notify with:</string>
 <string name="sound">sound</string>
 <string name="vibrate">vibration</string>
@@ -26,12 +27,12 @@
 <string name="change_account">Use a different account</string>
 <string name="save_settings">Apply/save settings</string>
 <string name="reset_settings">Reset to saved settings</string>
-<string name="follow_link">Follow @nanoTweeter for updates about new versions.</string>
+<string name="follow_link">Follow @FlowPast for updates about new versions.</string>
 <string name="unauthorized"><!-- This has to be short to fit in the notification. -->Unauthorized. Please sign in again.</string>
-<string name="notification_is_message">(Direct message)</string>
+<string name="notification_is_message">(Direct)</string>
 <string name="fetching_request_token">Contacting Twitter…</string>
 <string name="fetching_access_token">Checking Twitter access…</string>
-<string name="upgraders_need_to_sign_in_again">Hello!\n\nTwitter have changed the way they do signing in for apps, so you need to sign in again to keep using nanoTweeter.\n\nSorry for the inconvenience!</string>
+<string name="upgraders_need_to_sign_in_again">Hello!\n\nTwitter have changed the way they do signing in for apps, so you need to sign in again to keep using FlowPast.\n\nSorry for the inconvenience!</string>
 <string name="ok">OK</string>
 <string name="sign_in_again_later">I\'ll do it later</string>
 <string name="auth_not_completed">The signing-in process isn\'t completed yet. If you see the confirmation page from Twitter then please wait a few more seconds and it will finish automatically.\n\nWould you like to cancel signing in?</string>
@@ -39,6 +40,6 @@
 <string name="dont_cancel_auth">Don\'t cancel</string>
 <string name="auth_network_error">Could not contact Twitter. Please try again.</string>
 <string name="credits">Credits/licenses</string>
-<string name="credits_text">nanoTweeter is by Jon Colverson and is released under the MIT license &lt;http://opensource.org/licenses/mit-license.php&gt;\n\nIt uses the following libraries:\n\nApache Commons Lang (under Apache License 2.0 &lt;http://www.apache.org/licenses/LICENSE-2.0&gt;)\n\nSignpost (under Apache License 2.0 &lt;http://www.apache.org/licenses/LICENSE-2.0&gt;)</string>
-<string name="forbidden">You need to re-authorize nanoTweeter to get Direct Messages</string>
+<string name="credits_text">FlowPast is by Kevin Marks, based heavily on nanoTweeter is by Jon Colverson, and is released under the MIT license &lt;http://opensource.org/licenses/mit-license.php&gt;\n\nIt uses the following libraries:\n\nApache Commons Lang (under Apache License 2.0 &lt;http://www.apache.org/licenses/LICENSE-2.0&gt;)\n\nSignpost (under Apache License 2.0 &lt;http://www.apache.org/licenses/LICENSE-2.0&gt;)</string>
+<string name="forbidden">You need to re-authorize to get Direct Messages</string>
 </resources>

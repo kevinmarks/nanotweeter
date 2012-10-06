@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical"
+	android:orientation="horizontal"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	>
-<LinearLayout
-	android:orientation="horizontal"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	>
-<ImageView
+	<ImageView android:id="@+id/notification_icon"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	style="@style/notificationIcon"
 	/>
-<TextView android:id="@+id/notification_time"
+<LinearLayout 
+	android:orientation="vertical"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
-	style="@style/notificationTime"
+	>
+	<LinearLayout
+	android:orientation="horizontal"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	>
+
+<TextView android:id="@+id/notification_name"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	style="@style/notificationName"
 	/>
 <TextView android:id="@+id/notification_user"
 	android:layout_width="wrap_content"
@@ -29,6 +35,13 @@
 	android:layout_height="wrap_content"
 	style="@style/notificationIsMessage"
 	/>
+
+<TextView
+    android:id="@+id/notification_time"
+    style="@style/notificationTime"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+  />
 </LinearLayout>
 <TextView android:id="@+id/notification_text"
 	android:layout_width="fill_parent"
@@ -37,5 +50,7 @@
 	android:layout_marginLeft="2sp"
 	android:layout_marginRight="2sp"
 	android:layout_marginTop="5sp"
+	android:textSize="@dimen/notification_shorttext_text_size"
 	/>
+</LinearLayout>
 </LinearLayout>

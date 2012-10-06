@@ -114,6 +114,16 @@
 <TextView
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
+	android:text="@string/track_instructions"
+	/>
+<EditText android:id="@+id/track"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:singleLine="false"
+	/>
+<TextView
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
 	android:text="@string/filter_label"
 	/>
 <Spinner android:id="@+id/filter_type"
@@ -136,8 +146,9 @@
 <EditText android:id="@+id/filter"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:singleLine="true"
+	android:singleLine="false"
 	/>
+
 </LinearLayout>
 <TextView android:id="@+id/follow_link"
 	android:layout_width="wrap_content"
