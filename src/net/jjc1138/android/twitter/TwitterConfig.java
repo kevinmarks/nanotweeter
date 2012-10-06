@@ -35,7 +35,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 
 public class TwitterConfig extends Activity {
 	final static int[] INTERVALS = { 3, 5, 10, 15, 30, 60, 120 };
-	final static int DEFAULT_INTERVAL_INDEX = 4;
+	final static int DEFAULT_INTERVAL_INDEX = 1;
 	final static String PREFS = "prefs";
 
 	private CheckBox enable;
@@ -49,6 +49,7 @@ public class TwitterConfig extends Activity {
 	private Button sign_in;
 	private Spinner filter_type;
 	private EditText filter;
+	private EditText track;
 
 	private LinearLayout settings_changed;
 	private LinearLayout filter_needed;
@@ -72,6 +73,7 @@ public class TwitterConfig extends Activity {
 		sign_in = (Button) findViewById(R.id.sign_in);
 		filter_type = (Spinner) findViewById(R.id.filter_type);
 		filter = (EditText) findViewById(R.id.filter);
+		track = (EditText) findViewById(R.id.track);
 		
 		settings_changed = (LinearLayout) findViewById(R.id.settings_changed);
 		filter_needed = (LinearLayout) findViewById(R.id.filter_needed);
@@ -139,6 +141,7 @@ public class TwitterConfig extends Activity {
 		lights.setOnCheckedChangeListener(checkWatcher);
 		filter_type.setOnItemSelectedListener(selectionWatcher);
 		filter.addTextChangedListener(textWatcher);
+		track.addTextChangedListener(textWatcher);
 		
 		// Previews of notification actions:
 		sound.setOnClickListener(new OnClickListener() {
@@ -322,6 +325,7 @@ public class TwitterConfig extends Activity {
 		e.putBoolean("lights", lights.isChecked());
 		e.putInt("filter_type", filter_type.getSelectedItemPosition());
 		e.putString("filter", filter.getText().toString());
+		e.putString("track", track.getText().toString());
 		e.commit();
 	}
 
@@ -357,7 +361,8 @@ public class TwitterConfig extends Activity {
 		vibrate.setChecked(p.getBoolean("vibrate", false));
 		lights.setChecked(p.getBoolean("lights", false));
 		filter_type.setSelection(p.getInt("filter_type", Fetcher.FILTER_ALL));
-		filter.setText(p.getString("filter", ""));
+		filter.setText(p.getString("filter", "Benioff"));
+		track.setText(p.getString("track", "df12"));
 	}
 
 	private boolean isUISavedIn(SharedPreferences p) {
@@ -372,6 +377,7 @@ public class TwitterConfig extends Activity {
 			lights.isChecked() == p.getBoolean("lights", false) &&
 			filter_type.getSelectedItemPosition() ==
 				p.getInt("filter_type", Fetcher.FILTER_ALL) &&
-			filter.getText().toString().equals(p.getString("filter", ""));
+			filter.getText().toString().equals(p.getString("filter", "")) &&
+			track.getText().toString().equals(p.getString("track", ""));
 	}
 }

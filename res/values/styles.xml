@@ -6,7 +6,7 @@
 </style>
 <style name="notificationTime" parent="notificationTitle">
 	<item name="android:layout_marginLeft">3sp</item>
-	<item name="android:textSize">12sp</item>
+	<item name="android:textSize">10sp</item>
 	<item name="android:textStyle">normal</item>
 </style>
 <style name="notificationName" parent="notificationTime">
