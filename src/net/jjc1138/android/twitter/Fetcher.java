@@ -223,19 +223,22 @@ public class Fetcher extends Service {
 			}
 		}
 
-		private void showUnauthorizedNotification(boolean forbidden ) {
+		private void showUnauthorizedNotification(int status) {
 			Notification n = new Notification();
 			n.icon = R.drawable.notification_icon_status_bar;
+			String msg = getString(R.string.unauthorized);
+			if (status == HttpStatus.SC_FORBIDDEN ) {
+				msg  = getString(R.string.unauthorized);
+			} else {
+				msg = String.format("HTTP Error %i: Twitter hates apps" , status);
+			}
 			Intent i = new Intent(
 				Fetcher.this, TwitterAuth.class);
 			i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			n.setLatestEventInfo(Fetcher.this,
-				getString(R.string.app_name),
-				(forbidden) ? getString(R.string.forbidden) : getString(R.string.unauthorized) ,
-				PendingIntent.getActivity(Fetcher.this, 0, i, 0));
+			n.setLatestEventInfo(Fetcher.this, getString(R.string.app_name), msg, PendingIntent.getActivity(Fetcher.this, 0, i, 0));
 			n.flags |= Notification.FLAG_AUTO_CANCEL;
 			((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-				.notify((forbidden) ? DM_REAUTH_NOTIFICATION_ID : ERROR_NOTIFICATION_ID, n);
+				.notify((status == HttpStatus.SC_FORBIDDEN ) ? DM_REAUTH_NOTIFICATION_ID : ERROR_NOTIFICATION_ID, n);
 		}
 	
 		private HttpEntity download(
@@ -263,15 +266,15 @@ public class Fetcher extends Service {
 			int status = r.getStatusLine().getStatusCode();
 			HttpEntity ent = r.getEntity();
 			
-			if (status == HttpStatus.SC_UNAUTHORIZED) {
-				showUnauthorizedNotification(false);
+			if (status == HttpStatus.SC_UNAUTHORIZED || status == HttpStatus.SC_GONE) {
+				showUnauthorizedNotification(status);
 				
 				finish(ent);
 				throw new HttpErrorException(status);
 			} else if (status == HttpStatus.SC_FORBIDDEN) {
 				// this likely means we are in the "authed old style and are being denied DM's state"
 				// pop a dialog suggesting a reAuth - don't kill the whole thing
-				showUnauthorizedNotification(true);
+				showUnauthorizedNotification(status);
 				finish(ent);
 				return null;
 			} else {
@@ -318,7 +321,7 @@ public class Fetcher extends Service {
 					"Skipping fetch because we are not authenticated.");
 				
 				if (prefs.getString("password", "").length() != 0) {
-					showUnauthorizedNotification(false);
+					showUnauthorizedNotification(HttpStatus.SC_UNAUTHORIZED);
 				}
 				return;
 			}
