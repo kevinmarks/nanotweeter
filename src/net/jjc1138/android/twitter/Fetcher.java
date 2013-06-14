@@ -478,6 +478,73 @@ public class Fetcher extends Service {
 			final DateFormat twitterDateFormat = new SimpleDateFormat(
 				"E MMM dd HH:mm:ss Z yyyy");
 			final LinkedList<Tweet> tweets = new LinkedList<Tweet>();
+			class TweetParser {
+				// returns max id found
+				public long tweetsFromJson(InputStreamReader is, long lastMaxId) throws DownloadException {
+					long maxId = lastMaxId;
+						JsonReader jreader = new JsonReader(is);
+						try {
+							jreader.beginArray();
+							while (jreader.hasNext()){
+								
+								Date createdAt= new Date(System.currentTimeMillis());;
+								long id = -1;
+								String text = null;
+								String fullname = null;
+								String screenName = null;
+								String photo = null;
+
+								jreader.beginObject();
+								while (jreader.hasNext()){
+									String name = jreader.nextName();
+									if (name.equals("id")) {
+								         id = jreader.nextLong();
+								         maxId = Math.max(maxId, id);
+								       } else if (name.equals("created_at")) {
+								    	   try {
+												createdAt = twitterDateFormat.parse(jreader.nextString());
+											} catch (ParseException e) {
+												createdAt = new Date(System.currentTimeMillis());
+											}								       
+								       } else if (name.equals("text")) {
+								         text = jreader.nextString();
+								       } else if (name.equals("user")) {
+								         jreader.beginObject();
+								         while (jreader.hasNext()) {
+									         String uname = jreader.nextName();
+									         if (uname.equals("name")) {
+									        	 fullname = jreader.nextString();
+									         } else if (uname.equals("screen_name")) {
+									        	 screenName = jreader.nextString();
+									         } else if (uname.equals("profile_image_url")) {
+									        	 photo = jreader.nextString();
+									         } else {
+									        	 jreader.skipValue();
+									         }
+								         }
+								         jreader.endObject();
+										Status s = new Status(
+													id, createdAt, fullname, screenName, text, photo);
+										tweets.addFirst(s);
+								       }  else {
+								         jreader.skipValue();
+								       }
+								}
+								jreader.endObject();
+								
+							}
+							jreader.endArray();
+						jreader.close();
+						}
+						catch (IOException e)	
+						{
+							throw new DownloadException();
+						}
+					
+				return maxId;	
+				}
+			
+			}
 /*			abstract class StatusHandler extends PathHandler {
 				private final String[] statusPath = {
 					"statuses", "status" };
@@ -640,6 +707,7 @@ public class Fetcher extends Service {
 			InputSource is = new InputSource();
 			is.setEncoding("UTF-8");
 			*/
+			TweetParser tp = new TweetParser();
 			DefaultHttpClient client = new DefaultHttpClient();
 			try {
 				client.getParams().setParameter("http.useragent",
@@ -649,10 +717,9 @@ public class Fetcher extends Service {
 				assert false;
 			}
 			
-			final boolean firstRun = (lastFriendStatus == 1);
+			final boolean firstRun = (lastFriendStatus < 2);
 			final int filterType = prefs.getInt(
 				"filter_type", FILTER_ALL);
-			
 			HttpEntity ent = null;
 			try {
 				if (filterType != FILTER_ALL) {
@@ -664,65 +731,8 @@ public class Fetcher extends Service {
 						"count=" + ((firstRun && filterType == FILTER_NONE) ?
 							FIRST_RUN_NOTIFICATIONS : MAX_NOTIFICATIONS)));
 					if (ent != null) {
-						//reader.setContentHandler(new FriendStatusHandler());
-						//is.setByteStream(ent.getContent());
-						//reader.parse(is);
-						JsonReader jreader = new JsonReader(new InputStreamReader(ent.getContent(), "UTF-8"));
-						try {
-							jreader.beginArray();
-							while (jreader.hasNext()){
-								
-								Date createdAt= new Date(System.currentTimeMillis());;
-								long id = -1;
-								String text = null;
-								String fullname = null;
-								String screenName = null;
-								String photo = null;
-
-								jreader.beginObject();
-								while (jreader.hasNext()){
-									String name = jreader.nextName();
-									if (name.equals("id")) {
-								         id = jreader.nextLong();
-								       } else if (name.equals("created_at")) {
-								    	   try {
-												createdAt = twitterDateFormat.parse(jreader.nextString());
-											} catch (ParseException e) {
-												createdAt = new Date(System.currentTimeMillis());
-											}								       
-								       } else if (name.equals("text")) {
-								         text = jreader.nextString();
-								       } else if (name.equals("user")) {
-								         jreader.beginObject();
-								         while (jreader.hasNext()) {
-									         String uname = jreader.nextName();
-									         if (uname.equals("name")) {
-									        	 fullname = jreader.nextString();
-									         } else if (uname.equals("screen_name")) {
-									        	 screenName = jreader.nextString();
-									         } else if (uname.equals("profile_image_url")) {
-									        	 photo = jreader.nextString();
-									         } else {
-									        	 jreader.skipValue();
-									         }
-								         }
-								         jreader.endObject();
-										Status s = new Status(
-													id, createdAt, fullname, screenName, text, photo);
-										tweets.addFirst(s);
-								       }  else {
-								         jreader.skipValue();
-								       }
-								}
-								jreader.endObject();
-								
-							}
-							jreader.endArray();
-						}
-						finally {
-							jreader.close();
-							}
-						}
+						lastFriendStatus = tp.tweetsFromJson(new InputStreamReader(ent.getContent(), "UTF-8"), lastFriendStatus);
+					}
 						String[] trackWords = prefs.getString("track", "").trim().split(" ");
 						Pattern trackpat = null;
 						if (trackWords.length >0) {
@@ -765,35 +775,28 @@ public class Fetcher extends Service {
 					}
 				
 				
-/*				if (prefs.getBoolean("messages", false)) {
+				if (prefs.getBoolean("messages", false)) {
 					ent = download(client, consumer, new URI(API_ROOT +
 						"direct_messages.json" + "?include_rts=false&" +
-						"since_id=" + lastMessage));
+						(firstRun ? "" : ("since_id=" + lastMessage )) ));
 					if (ent != null) {
 						((NotificationManager) getSystemService(
 							NOTIFICATION_SERVICE))
 								.cancel(DM_REAUTH_NOTIFICATION_ID);
-						reader.setContentHandler(new MessageHandler());
-						is.setByteStream(ent.getContent());
-						reader.parse(is);
+						lastMessage = tp.tweetsFromJson(new InputStreamReader(ent.getContent(), "UTF-8"), lastMessage);
 					}
 				}
 				
 				if (prefs.getBoolean("replies", false)) {
 					ent = download(client, consumer, new URI(API_ROOT +
-						"statuses/mentions.json" + "?" +
+						"statuses/mentions_timeline.json" + "?" +
 						"include_rts=false&include_entities=true&" +
-						"since_id=" + lastReply));
+						(firstRun ? "" : ("since_id=" + lastReply )) ));
 					if (ent != null) {
-						reader.setContentHandler(new ReplyHandler());
-						is.setByteStream(ent.getContent());
-						reader.parse(is);
+						lastReply = tp.tweetsFromJson(new InputStreamReader(ent.getContent(), "UTF-8"), lastReply);
 					}
 				}
 
-			} catch (SAXException e) {
-				throw new DownloadException();
-				*/
 			} catch (IOException e) {
 				throw new DownloadException();
 			} catch (URISyntaxException e) {
