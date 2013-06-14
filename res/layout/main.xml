@@ -26,11 +26,13 @@
 	android:text="@string/enable"
 	android:checked="true"
 	/>
-<Spinner android:id="@+id/interval"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:prompt="@string/interval"
-	/>
+
+<Spinner
+    android:id="@+id/interval"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:prompt="@string/interval" />
+
 <TextView
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
@@ -120,6 +122,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:singleLine="false"
+	android:inputType="textAutoComplete"
 	/>
 <TextView
 	android:layout_width="wrap_content"
@@ -147,6 +150,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:singleLine="false"
+	android:inputType="textAutoComplete"
 	/>
 
 </LinearLayout>

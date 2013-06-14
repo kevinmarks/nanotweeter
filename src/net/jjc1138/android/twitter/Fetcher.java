@@ -68,6 +68,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -177,7 +178,7 @@ public class Fetcher extends Service {
 		private static final String API_HOST = "api.twitter.com";
 		private static final int API_PORT = 443;
 		private static final String API_ROOT =
-			"https://" + API_HOST + ":" + API_PORT + "/1/";
+			"https://" + API_HOST + ":" + API_PORT + "/1.1/";
 	
 		private static final int FIRST_RUN_NOTIFICATIONS = 3;
 		// This should be 200, but firing so many notifications causes a memory
@@ -230,7 +231,7 @@ public class Fetcher extends Service {
 			if (status == HttpStatus.SC_FORBIDDEN ) {
 				msg  = getString(R.string.unauthorized);
 			} else {
-				msg = String.format("HTTP Error %i: Twitter hates apps" , status);
+				msg = String.format("HTTP Error %d: Twitter finally killed us" , status);
 			}
 			Intent i = new Intent(
 				Fetcher.this, TwitterAuth.class);
@@ -349,7 +350,7 @@ public class Fetcher extends Service {
 			
 			final String username = prefs.getString("username", "");
 			
-			abstract class PathHandler extends DefaultHandler {
+	/*		abstract class PathHandler extends DefaultHandler {
 				private ArrayList<String> path =
 					new ArrayList<String>();
 				private ArrayList<StringBuffer> text =
@@ -409,7 +410,7 @@ public class Fetcher extends Service {
 					text.remove(last);
 				}
 			}
-			
+			*/
 			abstract class Tweet {
 				public Tweet(
 					long id, Date date, String name, String screenName, String text, String photo) {
@@ -477,7 +478,7 @@ public class Fetcher extends Service {
 			final DateFormat twitterDateFormat = new SimpleDateFormat(
 				"E MMM dd HH:mm:ss Z yyyy");
 			final LinkedList<Tweet> tweets = new LinkedList<Tweet>();
-			abstract class StatusHandler extends PathHandler {
+/*			abstract class StatusHandler extends PathHandler {
 				private final String[] statusPath = {
 					"statuses", "status" };
 				private final String[] createdAtPath = {
@@ -638,7 +639,7 @@ public class Fetcher extends Service {
 			}
 			InputSource is = new InputSource();
 			is.setEncoding("UTF-8");
-			
+			*/
 			DefaultHttpClient client = new DefaultHttpClient();
 			try {
 				client.getParams().setParameter("http.useragent",
@@ -656,16 +657,72 @@ public class Fetcher extends Service {
 			try {
 				if (filterType != FILTER_ALL) {
 					ent = download(client, consumer, new URI(API_ROOT +
-						"statuses/home_timeline.xml" + "?" +
+						"statuses/home_timeline.json" + "?" +
 						"include_rts=true&include_entities=true&" +
 						(firstRun ? "" :
 							("since_id=" + lastFriendStatus + "&")) +
 						"count=" + ((firstRun && filterType == FILTER_NONE) ?
 							FIRST_RUN_NOTIFICATIONS : MAX_NOTIFICATIONS)));
 					if (ent != null) {
-						reader.setContentHandler(new FriendStatusHandler());
-						is.setByteStream(ent.getContent());
-						reader.parse(is);
+						//reader.setContentHandler(new FriendStatusHandler());
+						//is.setByteStream(ent.getContent());
+						//reader.parse(is);
+						JsonReader jreader = new JsonReader(new InputStreamReader(ent.getContent(), "UTF-8"));
+						try {
+							jreader.beginArray();
+							while (jreader.hasNext()){
+								
+								Date createdAt= new Date(System.currentTimeMillis());;
+								long id = -1;
+								String text = null;
+								String fullname = null;
+								String screenName = null;
+								String photo = null;
+
+								jreader.beginObject();
+								while (jreader.hasNext()){
+									String name = jreader.nextName();
+									if (name.equals("id")) {
+								         id = jreader.nextLong();
+								       } else if (name.equals("created_at")) {
+								    	   try {
+												createdAt = twitterDateFormat.parse(jreader.nextString());
+											} catch (ParseException e) {
+												createdAt = new Date(System.currentTimeMillis());
+											}								       
+								       } else if (name.equals("text")) {
+								         text = jreader.nextString();
+								       } else if (name.equals("user")) {
+								         jreader.beginObject();
+								         while (jreader.hasNext()) {
+									         String uname = jreader.nextName();
+									         if (uname.equals("name")) {
+									        	 fullname = jreader.nextString();
+									         } else if (uname.equals("screen_name")) {
+									        	 screenName = jreader.nextString();
+									         } else if (uname.equals("profile_image_url")) {
+									        	 photo = jreader.nextString();
+									         } else {
+									        	 jreader.skipValue();
+									         }
+								         }
+								         jreader.endObject();
+										Status s = new Status(
+													id, createdAt, fullname, screenName, text, photo);
+										tweets.addFirst(s);
+								       }  else {
+								         jreader.skipValue();
+								       }
+								}
+								jreader.endObject();
+								
+							}
+							jreader.endArray();
+						}
+						finally {
+							jreader.close();
+							}
+						}
 						String[] trackWords = prefs.getString("track", "").trim().split(" ");
 						Pattern trackpat = null;
 						if (trackWords.length >0) {
@@ -706,11 +763,11 @@ public class Fetcher extends Service {
 							}
 						}
 					}
-				}
 				
-				if (prefs.getBoolean("messages", false)) {
+				
+/*				if (prefs.getBoolean("messages", false)) {
 					ent = download(client, consumer, new URI(API_ROOT +
-						"direct_messages.xml" + "?include_rts=false&" +
+						"direct_messages.json" + "?include_rts=false&" +
 						"since_id=" + lastMessage));
 					if (ent != null) {
 						((NotificationManager) getSystemService(
@@ -724,7 +781,7 @@ public class Fetcher extends Service {
 				
 				if (prefs.getBoolean("replies", false)) {
 					ent = download(client, consumer, new URI(API_ROOT +
-						"statuses/mentions.xml" + "?" +
+						"statuses/mentions.json" + "?" +
 						"include_rts=false&include_entities=true&" +
 						"since_id=" + lastReply));
 					if (ent != null) {
@@ -733,8 +790,10 @@ public class Fetcher extends Service {
 						reader.parse(is);
 					}
 				}
+
 			} catch (SAXException e) {
 				throw new DownloadException();
+				*/
 			} catch (IOException e) {
 				throw new DownloadException();
 			} catch (URISyntaxException e) {
