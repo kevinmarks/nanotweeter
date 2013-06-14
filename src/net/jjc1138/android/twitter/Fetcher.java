@@ -1,6 +1,5 @@
 package net.jjc1138.android.twitter;
 
-import static org.apache.commons.lang.StringEscapeUtils.unescapeHtml;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,9 +27,6 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.parsers.FactoryConfigurationError;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
 
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.exception.OAuthCommunicationException;
@@ -44,11 +40,6 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -523,10 +514,12 @@ public class Fetcher extends Service {
 									         }
 								         }
 								         jreader.endObject();
-										Status s = new Status(
-													id, createdAt, fullname, screenName, text, photo);
-										tweets.addFirst(s);
-								       }  else {
+								         if (!screenName.equals(username)) { 
+											Status s = new Status(
+														id, createdAt, fullname, screenName, text, photo);
+											tweets.addFirst(s);
+								         }
+								       } else {
 								         jreader.skipValue();
 								       }
 								}
