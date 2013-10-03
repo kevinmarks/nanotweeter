@@ -40,6 +40,7 @@
 <string name="dont_cancel_auth">Don\'t cancel</string>
 <string name="auth_network_error">Could not contact Twitter. Please try again.</string>
 <string name="credits">Credits/licenses</string>
-<string name="credits_text">FlowPast is by Kevin Marks, based heavily on nanoTweeter is by Jon Colverson, and is released under the MIT license &lt;http://opensource.org/licenses/mit-license.php&gt;\n\nIt uses the following libraries:\n\nApache Commons Lang (under Apache License 2.0 &lt;http://www.apache.org/licenses/LICENSE-2.0&gt;)\n\nSignpost (under Apache License 2.0 &lt;http://www.apache.org/licenses/LICENSE-2.0&gt;)</string>
+<string name="credits_text">FlowPast is by Kevin Marks, based heavily on nanoTweeter by Jon Colverson, and is released under the MIT license &lt;http://opensource.org/licenses/mit-license.php&gt;\n\nIt uses the following libraries:\n\nApache Commons Lang (under Apache License 2.0 &lt;http://www.apache.org/licenses/LICENSE-2.0&gt;)\n\nSignpost (under Apache License 2.0 &lt;http://www.apache.org/licenses/LICENSE-2.0&gt;)</string>
 <string name="forbidden">You need to re-authorize to get Direct Messages</string>
+<string name="retweet">Retweet</string>
 </resources>

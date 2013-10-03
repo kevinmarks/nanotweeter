@@ -17,7 +17,6 @@ import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -41,13 +40,13 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -64,7 +63,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.support.v4.app.*;
-import android.support.v4.app.NotificationCompat.BigTextStyle;
 
 public class Fetcher extends Service {
 	final static String LOG_TAG = "nanoTweeter";
@@ -304,6 +302,7 @@ public class Fetcher extends Service {
 		long lastMessage = 1;
 		long lastReply = 1;
 	
+		@SuppressLint("SimpleDateFormat")
 		public void fetch() throws DownloadException {
 			final CommonsHttpOAuthConsumer consumer =
 				TwitterAuth.getOAuthConsumer(Fetcher.this);
@@ -341,67 +340,6 @@ public class Fetcher extends Service {
 			
 			final String username = prefs.getString("username", "");
 			
-	/*		abstract class PathHandler extends DefaultHandler {
-				private ArrayList<String> path =
-					new ArrayList<String>();
-				private ArrayList<StringBuffer> text =
-					new ArrayList<StringBuffer>();
-			
-				protected boolean pathEquals(String[] a) {
-					int size = a.length;
-					if (path.size() != size) {
-						return false;
-					}
-					for (int i = 0; i < size; ++i) {
-						if (!a[i].equals(path.get(i))) {
-							return false;
-						}
-					}
-					return true;
-				}
-			
-				protected String getCurrentText() {
-					int depth = text.size();
-					if (depth == 0) {
-						return "";
-					}
-					return text.get(depth - 1).toString();
-				}
-			
-				@Override
-				public void characters(char[] ch, int start, int length)
-					throws SAXException {
-					
-					int depth = text.size();
-					if (depth == 0) {
-						return;
-					}
-					text.get(depth - 1).append(ch, start, length);
-				}
-				abstract void startElement(Attributes attributes);
-				
-				@Override
-				public void startElement(String uri, String localName,
-					String name, Attributes attributes)
-					throws SAXException {
-					
-					path.add(localName);
-					text.add(new StringBuffer(0));
-				}
-			
-				abstract void endElement();
-			
-				@Override
-				public void endElement(String uri, String localName,
-					String name) throws SAXException {
-					
-					endElement();
-					int last = path.size() - 1;
-					path.remove(last);
-					text.remove(last);
-				}
-			}
-			*/
 			abstract class Tweet {
 				public Tweet(
 					long id, Date date, String name, String screenName, String text, String photo) {
@@ -469,6 +407,7 @@ public class Fetcher extends Service {
 			final DateFormat twitterDateFormat = new SimpleDateFormat(
 				"E MMM dd HH:mm:ss Z yyyy");
 			final LinkedList<Tweet> tweets = new LinkedList<Tweet>();
+			
 			class TweetParser {
 				// returns max id found
 				public long tweetsFromJson(InputStreamReader is, long lastMaxId) throws DownloadException {
@@ -538,168 +477,6 @@ public class Fetcher extends Service {
 				}
 			
 			}
-/*			abstract class StatusHandler extends PathHandler {
-				private final String[] statusPath = {
-					"statuses", "status" };
-				private final String[] createdAtPath = {
-					"statuses", "status", "created_at" };
-				private final String[] idPath = {
-					"statuses", "status", "id" };
-				private final String[] textPath = {
-					"statuses", "status", "text" };
-				private final String[] urlPath = {
-						"statuses", "status", "entities", "urls", "url" };
-				private final String[] displayUrlPath = {
-					"statuses", "status", "entities", "urls", "url","display_url" };
-				private final String[] screenNamePath = {
-						"statuses", "status", "user", "screen_name" };
-				private final String[] namePath = {
-						"statuses", "status", "user", "name" };
-				private final String[] photoPath = {
-						"statuses", "status", "user", "profile_image_url" };
-				
-			
-				private Date createdAt;
-				private long id;
-				private String text;
-				private String name;
-				private String screenName;
-				private String photo;
-			
-				abstract void updateLast(long id);
-				@Override
-				void startElement(Attributes attributes) {
-					if (pathEquals(urlPath)) {
-						
-					}
-				}
-				@Override
-				void endElement() {
-					if (pathEquals(statusPath)) {
-						if (!screenName.equals(username)) {
-							Status s = new Status(
-								id, createdAt, name, screenName, text, photo);
-							tweets.addFirst(s);
-							// Log.v(LOG_TAG, s.toString());
-						}
-					} else if (pathEquals(createdAtPath)) {
-						try {
-							createdAt = twitterDateFormat.parse(
-								unescapeHtml(getCurrentText()));
-						} catch (ParseException e) {
-							createdAt = new Date(System.currentTimeMillis());
-						}
-					} else if (pathEquals(idPath)) {
-						try {
-							id = Long.parseLong(getCurrentText());
-						} catch (NumberFormatException e) {
-						}
-						updateLast(id);
-					} else if (pathEquals(textPath)) {
-						text = newLinesToSpaces(unescapeHtml(getCurrentText()));
-					} else if (pathEquals(namePath)) {
-						name = unescapeHtml(getCurrentText());
-					} else if (pathEquals(screenNamePath)) {
-						screenName = unescapeHtml(getCurrentText());
-					} else if (pathEquals(photoPath)) {
-						photo = unescapeHtml(getCurrentText());
-					}
-				}
-			}
-			
-			class FriendStatusHandler extends StatusHandler {
-				@Override
-				void updateLast(long id) {
-					lastFriendStatus = Math.max(lastFriendStatus, id);
-				}
-			}
-			class ReplyHandler extends StatusHandler {
-				@Override
-				void updateLast(long id) {
-					lastReply = Math.max(lastReply, id);
-				}
-			}
-			
-			class MessageHandler extends PathHandler {
-				private final String[] messagePath = {
-					"direct-messages", "direct_message" };
-				private final String[] createdAtPath = {
-					"direct-messages", "direct_message", "created_at" };
-				private final String[] idPath = {
-					"direct-messages", "direct_message", "id" };
-				private final String[] textPath = {
-					"direct-messages", "direct_message", "text" };
-				private final String[] screenNamePath = {
-						"direct-messages", "direct_message",
-						"sender", "screen_name" };
-				private final String[] namePath = {
-						"direct-messages", "direct_message",
-						"sender", "name" };
-				private final String[] photoPath = {
-						"direct-messages", "direct_message",
-						"sender", "profile_image_url" };
-			
-				private Date createdAt;
-				private long id;
-				private String text;
-				private String name;
-				private String screenName;
-				private String photo;
-				
-				@Override 
-				void startElement(Attributes attributes){
-					
-				}
-			
-				@Override
-				void endElement() {
-					if (pathEquals(messagePath)) {
-						Message m = new Message(
-							id, createdAt, name, screenName, text, photo);
-						tweets.addFirst(m);
-						// Log.v(LOG_TAG, m.toString());
-					} else if (pathEquals(createdAtPath)) {
-						try {
-							createdAt = twitterDateFormat.parse(
-								unescapeHtml(getCurrentText()));
-						} catch (ParseException e) {
-							createdAt = new Date(System.currentTimeMillis());
-						}
-					} else if (pathEquals(idPath)) {
-						try {
-							id = Long.parseLong(getCurrentText());
-						} catch (NumberFormatException e) {
-						}
-						lastMessage = Math.max(lastMessage, id);
-					} else if (pathEquals(textPath)) {
-						text = newLinesToSpaces(unescapeHtml(getCurrentText()));
-					} else if (pathEquals(namePath)) {
-						name = unescapeHtml(getCurrentText());
-					} else if (pathEquals(screenNamePath)) {
-						screenName = unescapeHtml(getCurrentText());
-					} else if (pathEquals(photoPath)) {
-						photo = unescapeHtml(getCurrentText());
-					}
-				}
-			}
-			
-			XMLReader reader;
-			try {
-				reader = SAXParserFactory.newInstance()
-					.newSAXParser().getXMLReader();
-			} catch (SAXException e) {
-				assert false;
-				throw new DownloadException();
-			} catch (ParserConfigurationException e) {
-				assert false;
-				throw new DownloadException();
-			} catch (FactoryConfigurationError e) {
-				assert false;
-				throw new DownloadException();
-			}
-			InputSource is = new InputSource();
-			is.setEncoding("UTF-8");
-			*/
 			TweetParser tp = new TweetParser();
 			DefaultHttpClient client = new DefaultHttpClient();
 			try {
@@ -866,7 +643,8 @@ public class Fetcher extends Service {
 					twitterRoot + (message ? "messages" :
 					URLEncoder.encode(screenName) + "/status/" + id)));
 				i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				
+				Intent retweet = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/intent/retweet?tweet_id=" + id) )
+				.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				final String text = t.getText();
 				final Date d = t.getDate();
 									
@@ -889,7 +667,7 @@ public class Fetcher extends Service {
 		         .setLargeIcon(bigIcon)
 		         .setWhen(d.getTime())
 		         .setContentIntent(PendingIntent.getActivity(Fetcher.this, 0, i, 0))
-		         //.addAction(R.drawable.notification_icon_status_bar, 'retweet', arg2)
+		         .addAction(R.drawable.notification_icon_status_bar, getString(R.string.retweet), PendingIntent.getActivity(Fetcher.this, 0, retweet, 0))
 		         .setStyle(new NotificationCompat.BigTextStyle()
 		         	.bigText(text))
 		         .build(); 
