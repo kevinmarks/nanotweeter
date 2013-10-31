@@ -118,12 +118,14 @@
 	android:layout_height="wrap_content"
 	android:text="@string/track_instructions"
 	/>
-<EditText android:id="@+id/track"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:singleLine="false"
-	android:inputType="textAutoComplete"
-	/>
+
+<EditText
+    android:id="@+id/track"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:inputType="textAutoComplete|textMultiLine"
+    android:singleLine="false" />
+
 <TextView
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
@@ -150,7 +152,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:singleLine="false"
-	android:inputType="textAutoComplete"
+	android:inputType="textAutoComplete|textMultiLine"
 	/>
 
 </LinearLayout>

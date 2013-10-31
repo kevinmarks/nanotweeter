@@ -682,7 +682,7 @@ public class Fetcher extends Service {
 						v.setImageViewBitmap(R.id.notification_icon, bigIcon);
 					}
 					// omit icon for Honeycomb + Ice Cream Sandwich as it displays the LargeIcon above too.
-					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN
+					if (Build.VERSION.SDK_INT < 16 /* JELLY_BEAN */ 
 							&& Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)  {
 						v.setViewVisibility(R.id.notification_icon, View.GONE);
 					}
